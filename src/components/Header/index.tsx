@@ -8,7 +8,7 @@ export default function Header() {
       <div className={styles.content}>
         <Link href="/">
           <a>
-            <img src="/images/logo.png" alt="logo" />
+            <img src="/images/logo.svg" alt="logo" />
           </a>
         </Link>
         <h1>Glaucia Cavalcanti</h1>
