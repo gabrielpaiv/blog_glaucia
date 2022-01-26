@@ -13,21 +13,21 @@ export default function Footer() {
             target="_blank"
             href="https://www.instagram.com/glauciacavalcantipsi/"
           >
-            <BsInstagram />
+            <BsInstagram size={20} />
             <span>@glauciacavalcantipsi</span>
           </a>
           <a
             target="_blank"
             href="https://www.facebook.com/glauciacavalcantipsi"
           >
-            <BsFacebook />
+            <BsFacebook size={20} />
             <span>glauciacavalcantipsi</span>
           </a>
           <a
             target="_blank"
             href="https://api.whatsapp.com/send?phone=5561992677978"
           >
-            <BsWhatsapp /> <span>(61)99267-7978</span>
+            <BsWhatsapp size={20} /> <span>(61)99267-7978</span>
           </a>
         </div>
         <div>

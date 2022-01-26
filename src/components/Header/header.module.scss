@@ -1,18 +1,19 @@
 .container {
-  height: 6.5rem;
+  height: 6rem;
   background: linear-gradient(to right, var(--purple-500), var(--violet-700));
 }
 
 .content {
   max-width: 1120px;
-  height: 6.5rem;
+  height: 6rem;
   margin: 0 1rem;
   padding: 0 2rem;
 
   display: flex;
   align-items: center;
+
   img {
-    max-height: 100px;
+    max-height: 80px;
     margin: 3rem;
   }
 

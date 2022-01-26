@@ -1,84 +1,144 @@
-import Footer from '../components/Footer'
-import common from '../styles/common.module.scss'
+import { useState } from 'react'
+import { GetStaticProps } from 'next'
+import Head from 'next/head'
+import Link from 'next/link'
+import Prismic from '@prismicio/client'
+import { getPrismicClient } from '../services/prismic'
 
-export default function Home({}) {
+import { ptBR } from 'date-fns/locale'
+import { format } from 'date-fns'
+
+import { IoCalendarOutline, IoPerson } from 'react-icons/io5'
+
+import Footer from '../components/Footer'
+
+import common from '../styles/common.module.scss'
+import styles from './home.module.scss'
+
+interface Post {
+  uid?: string
+  first_publication_date: string | null
+  data: {
+    title: string
+    subtitle: string
+    author: string
+  }
+}
+
+interface PostPagination {
+  next_page: string
+  results: Post[]
+}
+
+interface HomeProps {
+  postsPagination: PostPagination
+}
+
+export default function Home({ postsPagination }: HomeProps) {
+  const [results, setResults] = useState<Post[]>(postsPagination.results)
+  const [nextPage, setNextPage] = useState(postsPagination.next_page)
+  async function handleLoadPosts() {
+    const newResults = await fetch(nextPage).then(response => response.json())
+    setNextPage(newResults.nextPage)
+
+    const newPosts: Post[] = newResults.results.map(result => {
+      return {
+        uid: result.uid,
+        first_publication_date: result.first_publication_date,
+        data: {
+          author: result.data.author,
+          title: result.data.title,
+          subtitle: result.data.subtitle
+        }
+      }
+    })
+    setResults([...results, ...newPosts])
+  }
   return (
     <>
-      <div className={common.bodyContent}>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat
-          accusamus porro rem beatae perspiciatis expedita exercitationem
-          suscipit, ipsam magnam, nihil numquam deserunt facere quia, itaque
-          temporibus odit molestias ratione ullam!
-        </p>
-        <p>
-          Nostrum, enim maiores. Repellat repudiandae illum iste id, natus
-          corporis voluptate eius deserunt eligendi ducimus fugiat maxime
-          deleniti quos fuga dolorum provident assumenda similique eaque totam
-          veniam voluptas! Quas, inventore!
-        </p>
-        <p>
-          Maiores, reiciendis eaque. Deleniti ut, illum accusantium qui
-          reiciendis doloribus nemo voluptas quas voluptatum. Cupiditate
-          voluptatibus dignissimos harum, fugiat nulla nobis rem a, omnis
-          repellat fugit, voluptates magni. Fugit, impedit.
-        </p>
-        <p>
-          Cumque commodi quisquam totam pariatur dolor numquam maxime suscipit
-          vero cum dolore. Culpa neque dolore sed! Dolores quibusdam mollitia
-          quaerat repellendus dolorum, consequatur ad, esse error velit dolor
-          hic assumenda.
-        </p>
-        <p>
-          Voluptatibus numquam aspernatur voluptatum non soluta tenetur suscipit
-          laborum quis possimus, error iure nesciunt cupiditate, velit voluptate
-          reiciendis quos illo dignissimos, minima sequi aliquid quam dolorem
-          harum nam! Voluptates, fugiat.
-        </p>
-        <p>
-          Illo iste eaque et quia deserunt eos omnis ducimus repellat expedita
-          obcaecati consequatur eum minus, rem dolor est quaerat fuga animi
-          earum quasi unde tenetur non molestias inventore? Atque, ipsam.
-        </p>
-        <p>
-          Eius, aliquam nobis. Vitae vel odit placeat! Placeat odit impedit
-          praesentium fugiat aperiam reiciendis sunt, facilis voluptatum, dolor
-          earum totam quasi quas commodi neque? Quam harum ipsa itaque quidem
-          commodi.
-        </p>
-
-        <p>
-          Voluptates sequi beatae voluptas totam at similique iusto doloremque
-          eos sed, perferendis, accusantium vitae explicabo modi exercitationem
-          mollitia ad debitis quisquam laudantium quibusdam neque. Veritatis
-          consequuntur doloremque deserunt necessitatibus repudiandae!
-        </p>
-        <p>
-          Assumenda corrupti voluptates quia architecto eius repellat. Animi
-          distinctio iure beatae voluptas tenetur dignissimos cum sapiente autem
-          totam minima, corrupti provident ad, ipsa quae veritatis obcaecati
-          nostrum quam. Ad, quaerat.
-        </p>
-        <p>
-          Nesciunt facilis sit eligendi voluptate laborum animi reprehenderit,
-          maiores nihil libero nemo inventore praesentium incidunt similique vel
-          minima modi voluptatum soluta! Veritatis a expedita nobis accusantium?
-          Tempore illo minima quos.
-        </p>
-        <p>
-          Provident velit laboriosam deserunt. A maxime at, architecto illum
-          maiores, quod in vero cum iste rerum ratione perferendis! Error cumque
-          delectus enim aspernatur, magnam doloremque aperiam pariatur earum
-          maiores dolor.
-        </p>
-        <p>
-          Itaque, omnis libero iusto provident adipisci non quae delectus
-          aperiam, expedita quos cupiditate eveniet excepturi, ea molestias
-          praesentium rerum magni corporis voluptate eaque nisi odit quibusdam
-          pariatur! Earum, dolores qui?
-        </p>
-      </div>
-      <Footer />
+      <Head>
+        <title>Glaucia Cavalcanti</title>
+      </Head>
+      <main className={common.bodyContent}>
+        <div className={styles.posts}>
+          {results.map(post => {
+            const date = new Date(post.first_publication_date)
+            return (
+              <Link
+                href={`/post/${date.getFullYear()}/${date.getMonth() + 1}/${
+                  post.uid
+                }`}
+                key={post.uid}
+              >
+                <a>
+                  <h1>{post.data.title}</h1>
+                  <p>{post.data.subtitle}</p>
+                  <div className={styles.info}>
+                    <div>
+                      <IoCalendarOutline size={20} />
+                      <time>
+                        {format(
+                          new Date(post.first_publication_date),
+                          'dd MMM yyyy',
+                          {
+                            locale: ptBR
+                          }
+                        )}
+                      </time>
+                    </div>
+                    <div>
+                      <IoPerson size={20} />
+                      {post.data.author}
+                    </div>
+                  </div>
+                </a>
+              </Link>
+            )
+          })}
+          {nextPage ? (
+            <button onClick={handleLoadPosts}>Carregar mais posts</button>
+          ) : (
+            ''
+          )}
+        </div>
+      </main>
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient()
+  const postsResponse = await prismic.query(
+    [Prismic.predicates.at('document.type', 'posts')],
+    {
+      fetch: [
+        'publication.title',
+        'publication.subtitle',
+        'publication.author'
+      ],
+      pageSize: 5
+    }
+  )
+
+  const posts = postsResponse.results.map(post => {
+    return {
+      uid: post.uid,
+      first_publication_date: post.first_publication_date,
+      data: {
+        title: post.data.title,
+        subtitle: post.data.subtitle,
+        author: post.data.author
+      }
+    }
+  })
+
+  return {
+    props: {
+      postsPagination: {
+        next_page: postsResponse.next_page,
+        results: posts
+      },
+      revalidate: 60 * 60 * 24
+    }
+  }
 }

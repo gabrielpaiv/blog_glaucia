@@ -11,7 +11,7 @@ export default function Header() {
             <img src="/images/logo.svg" alt="logo" />
           </a>
         </Link>
-        <h1>Glaucia Cavalcanti</h1>
+        <h2>Glaucia Cavalcanti</h2>
       </div>
     </header>
   )
