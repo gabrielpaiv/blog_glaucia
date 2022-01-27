@@ -63,7 +63,7 @@ export default function MyPost({ post, navigation }: PostProps) {
   const router = useRouter()
 
   if (router.isFallback) {
-    return <h1>Carregando...</h1>
+    return <h1 className={common.bodyContent}>Carregando...</h1>
   }
 
   const nextPostPublicationDate = new Date(
