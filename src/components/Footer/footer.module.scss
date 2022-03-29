@@ -1,6 +1,4 @@
 .container {
-  height: 6.5rem;
-  width: 100%;
   background: linear-gradient(to right, var(--purple-500), var(--violet-700));
   position: relative;
   bottom: 0;
@@ -9,11 +7,12 @@
 
 .content {
   max-width: 1120px;
-  height: 6.2rem;
+  height: fit-content;
   margin: 0 auto;
-  padding: 0.2rem 2rem;
+  padding: 1rem 2rem;
 
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   a {
     span {
@@ -21,22 +20,20 @@
     }
     display: flex;
     align-items: center;
-    margin: 0.5rem;
+    margin: 1rem 0;
     font-size: 1rem;
   }
   h6 {
     font-size: 1rem;
   }
   .services {
-    margin-top: 0.1rem;
-    height: 3.2rem;
+    height: fit-content;
     font-size: 0.9rem;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     max-width: 500px;
     li {
-      margin-right: 1.5rem;
+      margin-top: 0.3rem;
     }
   }
 }

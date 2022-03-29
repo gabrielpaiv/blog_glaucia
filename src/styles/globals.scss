@@ -39,6 +39,11 @@
     font-size: 87.5%;
   }
 }
+@media (max-width: 500px) {
+  html {
+    font-size: 80%;
+  }
+}
 
 body {
   background: linear-gradient(to right, var(--violet-400), var(--purple-600));
